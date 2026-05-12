@@ -1,5 +1,7 @@
 # ProMotion Draw: Strategy Mapping Tool
 
+Site: https://pro-motion.vercel.app/ 
+
 This is a small, client-side software tool designed for strategy mapping and visual planning.
 
 ### The Backstory
@@ -19,8 +21,8 @@ It’s a simple drawing and mapping tool that lives entirely in the browser. It�
 
 I’ve been using this to create actual strategy videos. Here is a look at what the output looks like:
 
-![Alt Text](preview.png)
-![Alt Text](appPre.png)
+![Alt Text](assets/preview.png)
+![Alt Text](assets/appPre.png)
 
 [A YT Video made with this software](https://youtu.be/_ykdxwIKzYs)
 
@@ -31,6 +33,9 @@ Since this is a client-side app, there is no complicated setup.
 1. Download the project.
 2. Open `index.html` in any modern web browser.
 3. Start mapping.
+
+Direct -> Site: https://pro-motion.vercel.app/  or open that link
+
 
 ### Credits
 
