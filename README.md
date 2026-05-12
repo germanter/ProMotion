@@ -19,7 +19,7 @@ It’s a simple drawing and mapping tool that lives entirely in the browser. It�
 
 I’ve been using this to create actual strategy videos. Here is a look at what the output looks like:
 
-![Alt Text](path/to/your/image.png)
+![Alt Text](preview.png)
 
 [A YT Video made with this software](https://youtu.be/_ykdxwIKzYs)
 
