@@ -27,7 +27,7 @@ I’ve been using this to create actual strategy videos. Here is a look at what 
 
 Since this is a client-side app, there is no complicated setup.
 
-1. Download the files (`index.html`, `styles.css`, `app.js`).
+1. Download the project.
 2. Open `index.html` in any modern web browser.
 3. Start mapping.
 
