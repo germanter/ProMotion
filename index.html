@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProMotion Draw</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="app">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <span class="logo"><i class='bx bx-shape-circle'></i> ProMotion</span>
+            </div>
+            <div class="topbar-center">
+                <button class="tb-btn" id="btn-zoom-out" title="Zoom Out (-)"><i class='bx bx-minus'></i></button>
+                <span class="zoom-label" id="zoom-label">100%</span>
+                <button class="tb-btn" id="btn-zoom-in" title="Zoom In (+)"><i class='bx bx-plus'></i></button>
+                <button class="tb-btn" id="btn-zoom-fit" title="Fit to screen (F)">Fit</button>
+                <div class="tb-sep"></div>
+                <input type="color" id="bg-color" value="#ffffff" title="Canvas Background Color">
+                <label for="bg-color" class="color-label">BG</label>
+            </div>
+            <div class="topbar-right">
+                <button class="tb-btn ghost" id="btn-save-png"><i class='bx bx-image'></i> PNG</button>
+                <button class="tb-btn primary" id="btn-export"><i class='bx bx-video'></i> Export Video</button>
+                <div id="export-status" class="export-status">Ready</div>
+            </div>
+        </header>
+
+        <!-- MAIN AREA -->
+        <div class="main-area">
+
+            <!-- LEFT SIDEBAR -->
+            <aside class="sidebar">
+                <div class="sidebar-group">
+                    <button class="sb-btn active" id="tool-brush" title="Brush  B"><i class='bx bx-pen'></i></button>
+                    <button class="sb-btn" id="tool-eraser" title="Eraser  E"><i class='bx bx-eraser'></i></button>
+                    <button class="sb-btn" id="tool-polygon" title="Zone / Territory  V"><i class='bx bx-vector'></i></button>
+                </div>
+                <div class="sidebar-sep"></div>
+                <div class="sidebar-group">
+                    <button class="sb-btn" id="tool-pan" title="Pan Viewport  H"><i class='bxs bxs-hand-right'></i></button>
+                    <button class="sb-btn" id="tool-move" title="Move Images  M"><i class='bx bx-move'></i></button>
+                </div>
+                <div class="sidebar-sep"></div>
+                <div class="sidebar-group">
+                    <button class="sb-btn" id="btn-undo" title="Undo  Ctrl+Z"><i class='bx bx-undo'></i></button>
+                    <button class="sb-btn" id="btn-redo" title="Redo  Ctrl+Y"><i class='bx bx-redo'></i></button>
+                </div>
+                <div class="sidebar-sep"></div>
+                <div class="sidebar-group">
+                    <button class="sb-btn" id="btn-add-asset" title="Add Image"><i class='bx bx-image-add'></i></button>
+                    <button class="sb-btn danger" id="btn-clear" title="Clear Layer"><i class='bx bx-trash'></i></button>
+                </div>
+                <input type="file" id="file-asset" hidden accept="image/*">
+                <input type="file" id="file-import-bg" hidden accept="image/*">
+            </aside>
+
+            <!-- CANVAS WORKSPACE -->
+            <div class="workspace" id="workspace">
+                <div id="canvas-viewport">
+                    <canvas id="main-canvas"></canvas>
+                </div>
+                <!-- Space-drag hint -->
+                <div class="hud-hint" id="hud-hint" style="display:none">Pan Mode</div>
+                <!-- Zoom HUD -->
+                <div class="hud-zoom" id="hud-zoom">100%</div>
+                <!-- Selected image actions -->
+                <div class="hud-img-actions" id="hud-img-actions" style="display:none">
+                    <button id="btn-remove-asset"><i class='bx bx-trash'></i> Remove Image</button>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <aside class="right-panel" id="right-panel">
+                <!-- Brush Properties -->
+                <div class="panel-block" id="brush-panel">
+                    <div class="panel-title">Brush</div>
+                    <div class="prop-row">
+                        <span>Color</span>
+                        <input type="color" id="brush-color" value="#000000">
+                    </div>
+                    <div class="prop-row">
+                        <span>Size</span>
+                        <input type="range" id="brush-size" min="1" max="100" value="5">
+                        <span class="val" id="brush-size-val">5</span>
+                    </div>
+                    <div class="prop-row">
+                        <span>Opacity</span>
+                        <input type="range" id="brush-opacity" min="0.05" max="1" step="0.05" value="1">
+                        <span class="val" id="brush-opacity-val">100%</span>
+                    </div>
+                </div>
+
+                <!-- Polygon / Zone Properties -->
+                <div class="panel-block" id="polygon-panel">
+                    <div class="panel-title">Zone / Territory</div>
+                    <div class="prop-row">
+                        <span>Stroke</span>
+                        <input type="color" id="poly-stroke-color" value="#e05252">
+                    </div>
+                    <div class="prop-row">
+                        <span>Fill</span>
+                        <input type="color" id="poly-fill-color" value="#e05252">
+                    </div>
+                    <div class="prop-row">
+                        <span>Width</span>
+                        <input type="range" id="poly-stroke-width" min="1" max="30" value="3">
+                        <span class="val" id="poly-stroke-width-val">3</span>
+                    </div>
+                    <div class="prop-row">
+                        <span>Fill α</span>
+                        <input type="range" id="poly-fill-alpha" min="0" max="1" step="0.05" value="0.25">
+                        <span class="val" id="poly-fill-alpha-val">25%</span>
+                    </div>
+                    <div class="poly-hint">Click canvas to add points.<br>Click first point or double-click to close.<br>Click inside closed zone to fill.<br>Drag vertices — moves are recorded on timeline.</div>
+                </div>
+
+                <!-- Layers -->
+                <div class="panel-block" id="layers-block">
+                    <div class="panel-title-row">
+                        <span class="panel-title">Layers</span>
+                        <button class="tiny-btn" id="btn-add-layer"><i class='bx bx-plus'></i></button>
+                    </div>
+                    <div id="layers-list"></div>
+                </div>
+
+                <!-- Canvas Settings -->
+                <div class="panel-block">
+                    <div class="panel-title">Canvas</div>
+                    <button class="panel-btn" id="btn-import-bg"><i class='bx bx-image-alt'></i> Set Background Image</button>
+                    <button class="panel-btn" id="mode-blank"><i class='bx bx-file-blank'></i> Reset to Blank</button>
+                </div>
+            </aside>
+
+        </div><!-- /main-area -->
+
+        <!-- BOTTOM TIMELINE -->
+        <div class="timeline-panel">
+            <div class="tl-controls">
+                <button class="tl-btn" id="btn-play"><i class='bx bx-play'></i></button>
+                <button class="tl-btn" id="btn-stop"><i class='bx bx-stop'></i></button>
+                <select id="playback-speed" class="tl-select">
+                    <option value="0.5">0.5x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="2">2x</option>
+                    <option value="4">4x</option>
+                    <option value="8">8x</option>
+                </select>
+                <span class="tl-time" id="time-display">0.0s / 0.0s</span>
+                <div class="tl-flex"></div>
+                <div class="keyframe-hint" id="keyframe-hint" style="display:none">
+                    <span id="kf-selected-label"></span>
+                    <button class="tl-btn ghost" id="kf-delete-btn" title="Delete Keyframe"><i class='bx bx-trash'></i></button>
+                </div>
+                <button class="tl-btn accent" id="btn-add-keyframe" title="Capture current zoom/pan as keyframe at current time">
+                    <i class='bx bx-key'></i> Set Keyframe
+                </button>
+            </div>
+            <div class="tl-track-area">
+                <div class="tl-track" id="tl-track">
+                    <div class="tl-cursor" id="tl-cursor"></div>
+                    <div class="tl-ruler" id="tl-ruler"></div>
+                    <div class="tl-keyframes" id="tl-keyframes"></div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /app -->
+
+    <script src="scripts/app.js"></script>
+</body>
+</html>
